@@ -79,15 +79,16 @@ def dibujar_tablero(f, n):
 
 
     #Colocamos x en el tablero si el literal es igual a 1,si es igual a 2 colocamos 2 y si es igual a 3 vacio
-    contadorInd=1
     for hola in f:   
-        if hola=='1' :
-            ab = AnnotationBbox(imagebox1, direcciones[contadorInd], frameon=False)
-            axes.add_artist(ab)
-        elif hola=='2':
-            ab = AnnotationBbox(imagebox2, direcciones[contadorInd], frameon=False)
-            axes.add_artist(ab)
-        contadorInd+=1
+        if '~'  not in hola:
+            if 'x' in hola:
+                h=hola.replace('x',"")
+                ab = AnnotationBbox(imagebox1, direcciones[int(h)], frameon=False)
+                axes.add_artist(ab)
+            elif 'o' in hola:
+                h=hola.replace('o',"")
+                ab = AnnotationBbox(imagebox2, direcciones[int(h)], frameon=False)
+                axes.add_artist(ab)
     # Agregamos el titulo al tablero
     plt.title("Tablero" +str(n)) 
     #fig.savefig("tablero_" + str(n) + ".png")
@@ -99,7 +100,7 @@ with open("C:/Users/Julian/Desktop/Universidad/Logica para la ciencias de la com
     print len(lineas)
     contador=1
     for l in lineas:
-        linea=l.split(';')
+        linea=l.split('\t')
         print linea
         print "Dibujando tablero:", linea
         b=dibujar_tablero(linea, contador)
