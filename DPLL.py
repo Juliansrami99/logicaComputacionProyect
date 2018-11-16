@@ -11,10 +11,10 @@ class DPLL:
     # De esta forma aplicamos el algortimo
     def DO_DPLL(self):
         # Solucionaremos el SAT problem a traves de DPLL
-        sol= self.solucionar_DPLL(self.cnf, self.literales)
+        sas,inter= self.solucionar_DPLL(self.cnf, self.literales)
         # si lo que nos retorna la solucion es 'True' entonces la formula es satisfacible, de lo contrario es insatisfacible
-        if sol==True:
-            return 'satisfacible'
+        if sas==True:
+            return 'satisfacible',inter
         else:
             return 'insatisfacible'
         
@@ -30,7 +30,9 @@ class DPLL:
             return False
         # De lo contrario si despues de aplicar el unit propagation el conjunto S prima esta vacio entonces la formula es satisfacible
         if len(cnf)==0:
-            return True
+            if '' in literales:
+                literales.pop('')
+            return True,literales
         # Si aun la funciona aun no retorna nada vamos a seguir el siguiente proceso:
         # buscaremos entre todas las clausulas el literal que mas se repita y que aun no haya sido asignado en las interpretaciones para seguir con el algoritmo
         # La variable lista almacena toda las lista de clausulas como si fuera una sola lista tal que podemos buscar el que mas se repite    
@@ -41,14 +43,13 @@ class DPLL:
         literal_temp=literales
         # Igual con el conjunto S
         cnf_temp=cnf
-        # Lo primero que haremos para seguir con el proceso es que es eliminar de los literales que aun no han sido asignados, el literal que seleccionamos
-        if k in literal_temp:
-            literal_temp.remove(k)
         # Definiremos el conjunto s prima que se obtiene de eliminar de s las clausulas con el literal k y que tambien tengan su complemento    
         if '-' in k:
             j=k.replace('-',"")
             s_prima=self.eliminar(cnf, j)
             s_prima_1=self.eliminar(cnf, k)
+            if j not in literal_temp:
+                literal_temp[j]=False
             return (self.solucionar_DPLL(s_prima,literal_temp) or self.solucionar_DPLL(s_prima_1,literal_temp))
         else:
             s_prima=self.eliminar(cnf, k)
@@ -56,6 +57,8 @@ class DPLL:
             s_prima_1=self.eliminar(cnf_temp, '-'+k)
             # Aca lo que hacemos es hacer los que hace el algoritmo donde primero mira si la formula es satisfacible eliminando el literal y en caso de que no lo sea.....
             #...... lo que hace es mirar si eliminando su complemento la formula sea satisfacible, en caso de ninguna forma lo sea, retornara insatisfacible
+            if k not in literal_temp:
+                literal_temp[k]=True
             return (self.solucionar_DPLL(s_prima,literal_temp) or self.solucionar_DPLL(s_prima_1,literal_temp))
 
 
@@ -89,10 +92,8 @@ class DPLL:
                     clausulas_literal=[]
                     clausula.remove(j)
                     temp.append([x for x in clausula if i!= j])
-            if literal in lit:
-                lit.remove(literal)
-            if j in lit:
-                lit.remove(j)
+            if j not in lit:
+                lit[j]=False
             
             return temp, lit
 
@@ -104,11 +105,8 @@ class DPLL:
                     clausula.remove('-'+literal)
                     temp.append([x for x in clausula if i!= ('-'+literal)])
             # Marcamos como asignado el literal, basicamente eliminandolo de los literales que aun no han sido asignados 
-            if literal in lit:
-                lit.remove(literal)
-            # Marcamos como asignado el literal complementario, basicamente eliminandolo de los literales que aun no han sido asignados
-            if ('-'+literal) in lit:
-                lit.remove(literal)
+            if literal not in lit:
+                lit[literal]=True
             # Retornamos el conjunto nuevo de clausulas y los literales que aun no han sido asignados
             return temp, lit
 
@@ -149,8 +147,9 @@ class DPLL:
             
             
         
-    
-            
+
+
+
             
         
         

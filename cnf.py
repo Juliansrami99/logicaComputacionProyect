@@ -249,9 +249,6 @@ def formaClausal(f):
 	return conjuntoClausulas
 
 #################################################
-
-letrasProposicionales = ['p', 'q', 'r']
-
 # cadena = 'q--p->--'
 # cadena = 'qpY-'
 # cadena = 'rq-pO->'
@@ -263,44 +260,3 @@ letrasProposicionales = ['p', 'q', 'r']
 # cadena = 'r-q-YpY'
 # cadena = cadena + 'r-qYp-Y' + 'O'
 # cadena = cadena + 'rq-Yp-Y' + 'O'
-cadena = 'qp>-qpYq-p-YOO-'
-
-A = StringtoTree(cadena, letrasProposicionales)
-
-print(u"Trabajando con la fórmula:\n ", Inorder(A))
-
-A = quitarDobleNegacion(A)
-
-print(u"La fórmula sin dobles negaciones es:\n ", Inorder(A))
-
-A = reemplazarImplicacion(A)
-
-print(u"La fórmula reemplazando implicaciones es:\n ", Inorder(A))
-
-A = quitarDobleNegacion(A)
-
-print(u"La fórmula sin dobles negaciones es:\n ", Inorder(A))
-
-OK = True
-while OK:
-	aux1 = Inorder(A)
-	print("Se analiza: ", aux1)
-	B = deMorgan(A)
-	B = quitarDobleNegacion(B)
-	aux2 = Inorder(B)
-	print("Se obtuvo : ", aux2)
-	if  aux1 != aux2:
-		print(u"Se aplicó deMorgan")
-		OK = True
-		A = B
-	else:
-		print(u"No se aplicó deMorgan")
-		OK = False
-
-OK = True
-while OK:
-	OK, A = aplicaDistributiva(A)
-
-conjuntoClausulas = formaClausal(A)
-
-print("Conjunto de disyunciones de literales:\n ", conjuntoClausulas)

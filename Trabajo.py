@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*
+
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.offsetbox import AnnotationBbox, OffsetImage
@@ -42,7 +44,7 @@ def dibujar_tablero(f, n):
     tangulos.append(patches.Rectangle(*[(0, 0), step, step],\
             facecolor='lemonchiffon'))
 
-    # Creo las líneas del tablero
+    # Creo las lÃ­neas del tablero
     for j in range(3):
         locacion = j * step
         # Crea linea horizontal en el rectangulo
@@ -77,35 +79,55 @@ def dibujar_tablero(f, n):
     direcciones[8] = [0.5, 0.165]
     direcciones[9] = [0.835, 0.165]
 
-
+    lista=['1','2','3','4','5','6','7','8','9']
+    lista2=['a','b','c','d','e','f','g','h','i']
     #Colocamos x en el tablero si el literal es igual a 1,si es igual a 2 colocamos 2 y si es igual a 3 vacio
     for hola in f:   
-        if '~'  not in hola:
-            if 'x' in hola:
-                h=hola.replace('x',"")
-                ab = AnnotationBbox(imagebox1, direcciones[int(h)], frameon=False)
+        if '-'  not in hola:
+            if hola in lista:
+                ab = AnnotationBbox(imagebox1, direcciones[int(hola)], frameon=False)
                 axes.add_artist(ab)
-            elif 'o' in hola:
-                h=hola.replace('o',"")
-                ab = AnnotationBbox(imagebox2, direcciones[int(h)], frameon=False)
+            elif hola in lista2:
+                if hola=='a':
+                    h=1
+                elif hola=='b':
+                    h=2
+                elif hola=='c':
+                    h=3
+                elif hola=='d':
+                    h=4
+                elif hola=='e':
+                    h=5
+                elif hola=='f':
+                    h=6
+                elif hola=='g':
+                    h=7
+                elif hola=='h':
+                    h=8
+
+                elif hola=='i':
+                    h=9
+                    
+                
+                ab = AnnotationBbox(imagebox2, direcciones[h], frameon=False)
                 axes.add_artist(ab)
     # Agregamos el titulo al tablero
     plt.title("Tablero" +str(n)) 
     #fig.savefig("tablero_" + str(n) + ".png")
 
 
-with open("C:/Users/Julian/Desktop/Universidad/Logica para la ciencias de la computacion/Trabajo en python/Archivo.csv",'r')as archivo:
-    lineas=archivo.read().splitlines()
-    lineas.pop(0)
-    print len(lineas)
-    contador=1
-    for l in lineas:
-        linea=l.split('\t')
-        print linea
-        print "Dibujando tablero:", linea
-        b=dibujar_tablero(linea, contador)
-        contador += 1
-        plt.show()
+##with open("C:/Users/Julian/Desktop/Universidad/Logica para la ciencias de la computacion/Trabajo en python/Archivo.csv",'r')as archivo:
+##    lineas=archivo.read().splitlines()
+##    lineas.pop(0)
+##    print len(lineas)
+##    contador=1
+##    for l in lineas:
+##        linea=l.split('\t')
+##        print linea
+##        print "Dibujando tablero:", linea
+##        b=dibujar_tablero(linea, contador)
+##        contador += 1
+##        plt.show()
         
                 
     
